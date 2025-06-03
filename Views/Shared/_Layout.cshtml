@@ -1,0 +1,1118 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Flexy Admin</title>
+    <link rel="shortcut icon" type="image/png" href="~/assets/images/logos/favicon.png" asp-append-version="true" />
+    <link rel="stylesheet" href="~/assets/css/styles.min.css" asp-append-version="true" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Universal reset to remove default margins/paddings from all elements */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        /* Apply Inter font globally and ensure no extra space at the very top of the body */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        /*
+                 * If the header is fixed, content below it might hide underneath.
+                 * Adding padding-top to the body-wrapper pushes the content down,
+                 * preventing it from being obscured by the fixed header.
+                 * Adjust the '60px' value based on the actual height of your header.
+                 * You might need to inspect the 'app-header' height in your browser's dev tools.
+                 */
+        .body-wrapper {
+            padding-top: 60px; /* Adjust this value if your header height is different */
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+         data-sidebar-position="fixed" data-header-position="fixed">
+
+        <aside class="left-sidebar">
+            <div>
+                <div class="brand-logo d-flex align-items-center justify-content-between">
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="text-nowrap logo-img">
+                        <img src="~/assets/images/logos/logo.svg" alt="" asp-append-version="true" />
+                    </a>
+                    <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+                        <i class="ti ti-x fs-6"></i>
+                    </div>
+                </div>
+                <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+                    <ul id="sidebarnav">
+                        <li class="nav-small-cap">
+                            <span class="hide-menu">Home</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" asp-area="" asp-controller="Home" asp-action="Index" aria-expanded="false">
+                                <i class="ti ti-atom"></i>
+                                <span class="hide-menu">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between" target="_blank"
+                               href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/index.html" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-aperture"></i>
+                                    </span>
+                                    <span class="hide-menu">Analytical</span>
+                                </div>
+                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between" target="_blank"
+                               href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/index2.html" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-shopping-cart"></i>
+                                    </span>
+                                    <span class="hide-menu">eCommerce</span>
+                                </div>
+                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-layout-grid"></i>
+                                    </span>
+                                    <span class="hide-menu">Front Pages</span>
+                                </div>
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/frontend-landingpage.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Homepage</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/frontend-aboutpage.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">About Us</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/frontend-blogpage.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Blog</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/frontend-blogdetailpage.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Blog Details</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/frontend-contactpage.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Contact Us</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/frontend-portfoliopage.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Portfolio</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/frontend-pricingpage.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Pricing</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <span class="sidebar-divider lg"></span>
+                        </li>
+
+                        <li class="nav-small-cap">
+                            <span class="hide-menu">UI</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" asp-area="" asp-controller="Home" asp-action="UiButtons" aria-expanded="false">
+                                <i class="ti ti-layers-subtract"></i>
+                                <span class="hide-menu">Buttons</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" asp-area="" asp-controller="Home" asp-action="UiAlerts" aria-expanded="false">
+                                <i class="ti ti-alert-circle"></i>
+                                <span class="hide-menu">Alerts</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" asp-area="" asp-controller="Home" asp-action="UiCard" aria-expanded="false">
+                                <i class="ti ti-cards"></i>
+                                <span class="hide-menu">Card</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" asp-area="" asp-controller="Home" asp-action="UiForms" aria-expanded="false">
+                                <i class="ti ti-file-text"></i>
+                                <span class="hide-menu">Forms</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" asp-area="" asp-controller="Home" asp-action="UiTypography" aria-expanded="false">
+                                <i class="ti ti-typography"></i>
+                                <span class="hide-menu">Typography</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-layout-grid"></i>
+                                    </span>
+                                    <span class="hide-menu">Ui Elements</span>
+                                </div>
+
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-accordian.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Accordian</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-badge.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Badge</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-dropdowns.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Dropdowns</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-modals.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Modals</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-tab.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Tab</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-tooltip-popover.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Tooltip & Popover</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-notification.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Notification</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-progressbar.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Progressbar</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-pagination.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Pagination</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-bootstrap-ui.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Bootstrap UI</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-breadcrumb.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Breadcrumb</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-offcanvas.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Offcanvas</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-lists.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Lists</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-grid.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Grid</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-carousel.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Carousel</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-scrollspy.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Scrollspy</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-spinner.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Spinner</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-link.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Link</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-components"></i>
+                                    </span>
+                                    <span class="hide-menu">Components</span>
+                                </div>
+
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/component-sweetalert.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Sweet Alert</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/component-nestable.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Nestable</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/component-noui-slider.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Noui slider</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/component-rating.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Rating</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/component-toastr.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Toastr</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-cards"></i>
+                                    </span>
+                                    <span class="hide-menu">Cards</span>
+                                </div>
+
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-cards.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Basic Cards</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-card-customs.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Custom Cards</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-card-weather.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Weather Cards</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/ui-card-draggable.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Draggable Cards</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-small-cap">
+                            <span class="hide-menu">Apps</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-basket"></i>
+                                    </span>
+                                    <span class="hide-menu">Ecommerce</span>
+                                </div>
+
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/eco-shop.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Shop</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/eco-shop-detail.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Details</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/eco-product-list.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">List</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/eco-checkout.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Checkout</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/eco-add-product.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Add Product</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/eco-edit-product.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Edit Product</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-chart-donut-3"></i>
+                                    </span>
+                                    <span class="hide-menu">Blog</span>
+                                </div>
+
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/blog-posts.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Blog Posts</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/blog-detail.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Blog Details</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between" target="_blank"
+                               href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/page-user-profile.html" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-user-circle"></i>
+                                    </span>
+                                    <span class="hide-menu">User Profile</span>
+                                </div>
+                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between" target="_blank"
+                               href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/app-email.html" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-mail"></i>
+                                    </span>
+                                    <span class="hide-menu">Email</span>
+                                </div>
+                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between" target="_blank"
+                               href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/app-calendar.html" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-calendar"></i>
+                                    </span>
+                                    <span class="hide-menu">Calendar</span>
+                                </div>
+                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between" target="_blank"
+                               href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/app-kanban.html" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-layout-kanban"></i>
+                                    </span>
+                                    <span class="hide-menu">Kanban</span>
+                                </div>
+                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between" target="_blank"
+                               href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/app-chat.html" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-message-dots"></i>
+                                    </span>
+                                    <span class="hide-menu">Chat</span>
+                                </div>
+                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between" target="_blank"
+                               href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/app-notes.html" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-notes"></i>
+                                    </span>
+                                    <span class="hide-menu">Notes</span>
+                                </div>
+                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between" target="_blank"
+                               href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/app-contact.html" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-phone"></i>
+                                    </span>
+                                    <span class="hide-menu">Contact Table</span>
+                                </div>
+                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between" target="_blank"
+                               href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/app-contact2.html" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-phone"></i>
+                                    </span>
+                                    <span class="hide-menu">Contact List</span>
+                                </div>
+                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between" target="_blank"
+                               href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/app-invoice.html" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-file-text"></i>
+                                    </span>
+                                    <span class="hide-menu">Invoice</span>
+                                </div>
+                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between" target="_blank"
+                               href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/app-tasks.html" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-playlist"></i>
+                                    </span>
+                                    <span class="hide-menu">Tasks</span>
+                                </div>
+                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between" target="_blank"
+                               href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/app-chat-bootstrap.html" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-brand-hipchat"></i>
+                                    </span>
+                                    <span class="hide-menu">Chat-Bootstrap</span>
+                                </div>
+                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between" target="_blank"
+                               href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/app-gallery.html" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-image"></i>
+                                    </span>
+                                    <span class="hide-menu">Gallery</span>
+                                </div>
+                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <span class="sidebar-divider lg"></span>
+                        </li>
+                        <li class="nav-small-cap">
+                            <span class="hide-menu">Charts</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-chart-bar"></i>
+                                    </span>
+                                    <span class="hide-menu">Charts</span>
+                                </div>
+
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/chart-apex-line.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Line Chart</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/chart-apex-area.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Area Chart</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/chart-apex-column.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Column Chart</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/chart-apex-bar.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Bar Chart</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/chart-apex-mixed.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Mixed Chart</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/chart-apex-candlestick.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Candlestick Chart</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/chart-apex-boxplot.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Boxplot Chart</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/chart-apex-radialbar.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Radialbar Chart</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/chart-apex-pie.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Pie Chart</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/chart-apex-radar.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Radar Chart</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link justify-content-between" target="_blank"
+                                       href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/chart-apex-polar-area.html">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="round-16 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-circle"></i>
+                                            </div>
+                                            <span class="hide-menu">Polararea Chart</span>
+                                        </div>
+                                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="sidebar-divider lg"></span>
+                        </li>
+                        <li class="nav-small-cap">
+                            <span class="hide-menu">Pages</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between" target="_blank"
+                               href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/page-invoice.html" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-file-description"></i>
+                                    </span>
+                                    <span class="hide-menu">Invoice Page</span>
+                                </div>
+                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" asp-area="" asp-controller="Home" asp-action="AuthenticationLogin" aria-expanded="false">
+                                <i class="ti ti-login"></i>
+                                <span class="hide-menu">Login</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" asp-area="" asp-controller="Home" asp-action="AuthenticationRegister" aria-expanded="false">
+                                <i class="ti ti-user-plus"></i>
+                                <span class="hide-menu">Register</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" asp-area="" asp-controller="Home" asp-action="Error" aria-expanded="false">
+                                <i class="ti ti-alert-circle"></i>
+                                <span class="hide-menu">Error</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="unlimited-access hide-menu bg-light-primary position-relative my-4 rounded">
+                        <div class="d-flex">
+                            <div class="unlimited-access-title">
+                                <h6 class="fw-semibold fs-4 mb-6 text-dark w-85">Unlimited Access</h6>
+                                <a href="https://www.wrappixel.com/templates/flexy-bootstrap-admin-template/" target="_blank"
+                                   class="btn btn-primary fs-2 fw-semibold lh-sm">Buy Now</a>
+                            </div>
+                            <div class="unlimited-access-img">
+                                <img src="~/assets/images/backgrounds/rocket.png" alt="" class="img-fluid" asp-append-version="true">
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </aside>
+        <div class="body-wrapper">
+            <header class="app-header">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <ul class="navbar-nav">
+                        <li class="nav-item d-block d-xl-none">
+                            <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
+                                <i class="ti ti-menu-2"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-icon-hover" href="javascript:void(0)">
+                                <i class="ti ti-bell-ringing"></i>
+                                <div class="notification bg-primary rounded-circle"></div>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+                        <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+                            <a href="https://adminmart.com/product/flexy-bootstrap-5-admin-template/" target="_blank"
+                               class="btn btn-primary">Buy Now</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+                                    <img src="~/assets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle" asp-append-version="true">
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
+                                    <div class="message-body">
+                                        <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                                            <i class="ti ti-user fs-6"></i>
+                                            <p class="mb-0 fs-3">My Profile</p>
+                                        </a>
+                                        <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                                            <i class="ti ti-mail fs-6"></i>
+                                            <p class="mb-0 fs-3">My Account</p>
+                                        </a>
+                                        <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                                            <i class="ti ti-list-check fs-6"></i>
+                                            <p class="mb-0 fs-3">My Task</p>
+                                        </a>
+                                        <a href="./authentication-login.html" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </header>
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script src="~/assets/libs/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+        <script src="~/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+        <script src="~/assets/js/sidebarmenu.js" asp-append-version="true"></script>
+        <script src="~/assets/js/app.min.js" asp-append-version="true"></script>
+        <script src="~/assets/libs/apexcharts/dist/apexcharts.min.js" asp-append-version="true"></script>
+        <script src="~/assets/js/dashboard.js" asp-append-version="true"></script>
+    }
+</body>
+</html>
