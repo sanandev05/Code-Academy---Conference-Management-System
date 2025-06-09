@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Code_Academy___Conference_Management_System.User;
 
 namespace Code_Academy___Conference_Management_System.Entities
 {
@@ -7,7 +8,7 @@ namespace Code_Academy___Conference_Management_System.Entities
     {
         public int EventId { get; set; }
 
-        public int PersonId { get; set; }
+        public string UserId { get; set; }
 
 
         public int Rating { get; set; }
@@ -18,7 +19,7 @@ namespace Code_Academy___Conference_Management_System.Entities
 
         public Event Event { get; set; }
 
-        public Person Person { get; set; }
+        public UserIdentity User { get; set; }
     }
 
 }

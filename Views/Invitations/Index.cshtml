@@ -1,0 +1,57 @@
+﻿@model List<InvitationVM>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
+}
+
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full">
+
+
+
+    <div class="body-wrapper">
+        <div class="container-fluid">
+            <h2 class="my-4">My Invitations</h2>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Status</th>
+                        <th>Sent At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var invite in Model)
+                    {
+                        <tr>
+                            <td>@invite.Event.Description</td>
+                            <td>
+                                @invite.InvitationStatus.ToString()
+                            </td>
+                            <td>@invite.SentAt.ToString("g")</td>
+                            <td>
+                                @if (invite.InvitationStatus == InvitationVM.Status.Pending)
+                                {
+                                    <form asp-action="Respond" method="post" class="d-inline">
+                                        <input type="hidden" name="invitationId" value="@invite.ID" />
+                                        <button type="submit" name="status" value="Accepted" class="btn btn-success btn-sm">Accept</button>
+                                    </form>
+                                    <form asp-action="Respond" method="post" class="d-inline ms-2">
+                                        <input type="hidden" name="invitationId" value="@invite.ID" />
+                                        <button type="submit" name="status" value="Declined" class="btn btn-danger btn-sm">Decline</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No action</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

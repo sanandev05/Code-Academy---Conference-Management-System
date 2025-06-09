@@ -1,4 +1,5 @@
 using Code_Academy___Conference_Management_System.Data;
+using Code_Academy___Conference_Management_System.Extentions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ builder.Services.AddDbContext<ConferenceDbContext>(options => {
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ConferenceDbContext>()
     .AddDefaultTokenProviders();
+
 var app = builder.Build();
 
 

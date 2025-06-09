@@ -35,7 +35,7 @@
 </head>
 <body>
     <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-         data-sidebar-position="fixed" data-header-position="fixed">
+        >
 
         <aside class="left-sidebar">
             <div>
@@ -59,15 +59,15 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link justify-content-between" target="_blank"
-                               href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/index.html" aria-expanded="false">
+                            <a asp-controller="Invitations" asp-action="Index" class="sidebar-link justify-content-between" target="_blank"
+                                aria-expanded="false">
                                 <div class="d-flex align-items-center gap-3">
                                     <span class="d-flex">
                                         <i class="ti ti-aperture"></i>
                                     </span>
-                                    <span class="hide-menu">Analytical</span>
+                                    <span class="hide-menu">Invitations</span>
                                 </div>
-                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                              
                             </a>
                         </li>
                         <li class="sidebar-item">
@@ -1054,7 +1054,7 @@
             </div>
         </aside>
         <div class="body-wrapper">
-            <header class="app-header">
+            <header class="app-header" style=" position:relative;top:-65px" >
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <ul class="navbar-nav">
                         <li class="nav-item d-block d-xl-none">

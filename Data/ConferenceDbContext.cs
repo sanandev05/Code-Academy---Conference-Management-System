@@ -15,26 +15,7 @@ namespace Code_Academy___Conference_Management_System.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Person
-            modelBuilder.Entity<Person>(entity =>
-            {
-                entity.Property(p => p.Name)
-                      .IsRequired()
-                      .HasMaxLength(50);
-
-                entity.Property(p => p.Surname)
-                      .IsRequired()
-                      .HasMaxLength(50);
-
-                entity.Property(p => p.Email)
-                      .IsRequired();
-
-                entity.Property(p => p.PhoneNumber)
-                      .HasMaxLength(20);
-
-                entity.Property(p => p.PersonRole)
-                      .IsRequired();
-            });
+          
 
             // Event
             modelBuilder.Entity<Event>(entity =>
@@ -70,9 +51,9 @@ namespace Code_Academy___Conference_Management_System.Data
                       .HasForeignKey(i => i.EventId)
                       .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasOne(i => i.Person)
+                entity.HasOne(i => i.User)
                       .WithMany()
-                      .HasForeignKey(i => i.PersonId)
+                      .HasForeignKey(i => i.UserId)
                       .OnDelete(DeleteBehavior.Cascade);
 
                 entity.Property(i => i.InvitationStatus)
@@ -155,9 +136,9 @@ namespace Code_Academy___Conference_Management_System.Data
                       .HasForeignKey(f => f.EventId)
                       .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasOne(f => f.Person)
+                entity.HasOne(f => f.User)
                       .WithMany()
-                      .HasForeignKey(f => f.PersonId)
+                      .HasForeignKey(f => f.UserId)
                       .OnDelete(DeleteBehavior.Cascade);
 
                 entity.Property(f => f.Rating)

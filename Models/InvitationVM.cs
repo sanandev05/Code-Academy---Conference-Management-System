@@ -1,8 +1,9 @@
-﻿using Code_Academy___Conference_Management_System.User;
+﻿using Code_Academy___Conference_Management_System.Entities;
+using Code_Academy___Conference_Management_System.User;
 
-namespace Code_Academy___Conference_Management_System.Entities
+namespace Code_Academy___Conference_Management_System.Models
 {
-    public class Invitation : BaseEntity
+    public class InvitationVM : BaseEntityVM
     {
         public enum Status
         {
@@ -11,10 +12,10 @@ namespace Code_Academy___Conference_Management_System.Entities
             Declined
         }
         public int EventId { get; set; }
-        public string UserId { get; set; }
+        public string PersonId { get; set; }
 
         public Event Event { get; set; }
-        public UserIdentity User { get; set; }
+        public UserIdentity Person { get; set; }
 
         public Status InvitationStatus { get; set; } = Status.Pending;
 
