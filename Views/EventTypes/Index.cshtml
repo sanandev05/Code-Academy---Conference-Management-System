@@ -1,0 +1,214 @@
+﻿@model CreateNewEventTypeVM
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Tədbir Növləri";
+}
+
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Code Academy</title>
+    <link href="~/css/style.css" rel="stylesheet"> 
+    <style>
+        /* Table Styling */
+        .table-event-types th, .table-event-types td {
+            vertical-align: middle;
+        }
+        .table-event-types thead th {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .action-buttons .btn {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1 class="display-6">Tədbir Növləri</h1>
+                <p class="lead text-muted">Mövcud tədbir növlərini idarə edin.</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createEventTypeModal">
+                    <i class="fas fa-plus me-2"></i>Yeni Növ Əlavə Et
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        @if (Model.EventTypeList != null && Model.EventTypeList.Any())
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-hover table-event-types">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#ID</th>
+                                            <th scope="col">Adı</th>
+                                            <th scope="col">Əməliyyatlar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var eventType in Model.EventTypeList.OrderBy(et => et.Name))
+                                        {
+                                            <tr id="eventType_@eventType.ID">
+                                                <td>@eventType.ID</td>
+                                                <td class="event-type-name">@eventType.Name</td>
+                                                <td class="action-buttons">
+                                                    <button class="btn btn-outline-info btn-sm edit-btn"
+                                                            data-id="@eventType.ID"
+                                                            data-name="@eventType.Name"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#editEventTypeModal">
+                                                        <i class="fas fa-edit"></i> Redaktə Et
+                                                    </button>
+                                                    <button class="btn btn-outline-danger btn-sm delete-btn"
+                                                            data-id="@eventType.ID"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#deleteEventTypeModal">
+                                                        <i class="fas fa-trash-alt"></i> Sil
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-info text-center" role="alert">
+                                Hal-hazırda heç bir tədbir növü əlavə edilməyib.
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="createEventTypeModal" tabindex="-1" aria-labelledby="createEventTypeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createEventTypeModalLabel">Yeni Tədbir Növü Əlavə Et</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- Create form -->
+                <form asp-controller="EventTypes" asp-action="Create" method="post">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label asp-for="EventType.Name" class="form-label"></label>
+                            <input asp-for="EventType.Name" class="form-control" />
+                            <span asp-validation-for="EventType.Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ləğv et</button>
+                        <button type="submit" class="btn btn-primary">Əlavə Et</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editEventTypeModal" tabindex="-1" aria-labelledby="editEventTypeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-controller="EventTypes" asp-action="Edit" method="post" id="editEventTypeForm">
+                    @Html.AntiForgeryToken()
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editEventTypeModalLabel">Tədbir Növünü Redaktə Et</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <input type="hidden" asp-for="EventType.ID" name="EventType.ID"  id="editTypeId" />
+
+                        <div class="mb-3">
+                            <label asp-for="EventType.Name" class="form-label"></label>
+                            <input asp-for="EventType.Name" class="form-control" id="editTypeName" />
+                            <span asp-validation-for="EventType.Name" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ləğv et</button>
+                        <button type="submit" class="btn btn-primary">Yadda saxla</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteEventTypeModal" tabindex="-1" aria-labelledby="deleteEventTypeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Delete form -->
+                <form asp-controller="EventTypes" asp-action="Delete" method="post" id="deleteEventTypeForm">
+                    @Html.AntiForgeryToken()
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteEventTypeModalLabel">Tədbir Növünü Sil</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>Siz əminsiniz bu tədbir növünü silməyə?</p>
+                        <input type="hidden" name="id" id="deleteTypeId" value="" />
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ləğv et</button>
+                        <button type="submit" class="btn btn-danger">Sil</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> @* AJAX üçün jQuery istifadəsi məsləhətdir *@
+    <script src="~/js/main.js"></script> @* Öz xüsusi Javascript faylınız *@
+    <script>
+        $('#editEventTypeModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('id');
+            var name = button.data('name');
+
+            var modal = $(this);
+            modal.find('#editTypeId').val(id);
+            modal.find('#editTypeName').val(name);
+        });
+
+        function showDeleteModal(id, name) {
+            document.getElementById('deleteTypeId').value = id;
+            document.getElementById('deleteTypeName').textContent = name;
+            var deleteModal = new bootstrap.Modal(document.getElementById('deleteEventTypeModal'));
+            deleteModal.show();
+        }
+
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const id = this.getAttribute('data-id');
+                document.getElementById('deleteTypeId').value = id;
+
+                // Show the delete modal
+                const deleteModal = new bootstrap.Modal(document.getElementById('deleteEventTypeModal'));
+                deleteModal.show();
+            });
+        });
+
+    </script>
+
+</body>
+</html>

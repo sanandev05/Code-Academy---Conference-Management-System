@@ -22,10 +22,10 @@ namespace Code_Academy___Conference_Management_System.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var models = await _invitationsService.GetAllAsync();
-            var user= await _userManager.GetUserAsync(User);
-            var filtered=models.Where(x=>x.PersonId==user.Id).ToList();
-            return View(filtered);
+            //var models = await _invitationsService.GetAllAsync();
+            //var user= await _userManager.GetUserAsync(User);
+            //var filtered=models.Where(x=>x.PersonId==user.Id).ToList();
+            return View();
         }
     }
 }

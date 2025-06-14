@@ -14,7 +14,7 @@ namespace Code_Academy___Conference_Management_System.Models
         public int EventId { get; set; }
         public string PersonId { get; set; }
 
-        public Event Event { get; set; }
+        public EventVM Event { get; set; }
         public UserIdentity Person { get; set; }
 
         public Status InvitationStatus { get; set; } = Status.Pending;

@@ -1,4 +1,5 @@
-﻿using Code_Academy___Conference_Management_System.Repositories.Interfaces;
+﻿using Code_Academy___Conference_Management_System.Repositories;
+using Code_Academy___Conference_Management_System.Repositories.Interfaces;
 
 namespace Code_Academy___Conference_Management_System.Extentions
 {
@@ -6,7 +7,9 @@ namespace Code_Academy___Conference_Management_System.Extentions
     {
         public static void AddCustomRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IInvitationRepository, IInvitationRepository>();
+            services.AddScoped<IInvitationRepository, InvitationRepository>();
+            services.AddScoped<IEventTypeRepository, EventTypeRepository>();
+
         }
     }
 }

@@ -7,7 +7,8 @@ namespace Code_Academy___Conference_Management_System.Entities
         public string Title { get; set; }
 
         public string Description { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
 
         public int LocationId { get; set; }
         public Location Location { get; set; }

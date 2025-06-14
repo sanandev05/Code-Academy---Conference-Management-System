@@ -50,12 +50,12 @@
                 <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
                     <ul id="sidebarnav">
                         <li class="nav-small-cap">
-                            <span class="hide-menu">Home</span>
+                            <span class="hide-menu">Ev</span>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" asp-area="" asp-controller="Home" asp-action="Index" aria-expanded="false">
+                            <a class="sidebar-link" asp-area="" asp-controller="Events" asp-action="Index" aria-expanded="false">
                                 <i class="ti ti-atom"></i>
-                                <span class="hide-menu">Dashboard</span>
+                                <span class="hide-menu">Tədbirlər</span>
                             </a>
                         </li>
                         <li class="sidebar-item">
@@ -71,15 +71,13 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link justify-content-between" target="_blank"
-                               href="https://bootstrapdemos.wrappixel.com/flexy/dist/main/index2.html" aria-expanded="false">
+                            <a asp-controller="EventTypes" asp-action="Index" class="sidebar-link justify-content-between" target="_blank" aria-expanded="false">
                                 <div class="d-flex align-items-center gap-3">
                                     <span class="d-flex">
                                         <i class="ti ti-shopping-cart"></i>
                                     </span>
-                                    <span class="hide-menu">eCommerce</span>
-                                </div>
-                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                                    <span class="hide-menu">Tədbir Növləri</span>
+                                </div>                            
                             </a>
                         </li>
                         <li class="sidebar-item">
@@ -1020,13 +1018,13 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" asp-area="" asp-controller="Home" asp-action="AuthenticationLogin" aria-expanded="false">
+                            <a class="sidebar-link" asp-area="" asp-controller="Account" asp-action="SignIn" aria-expanded="false">
                                 <i class="ti ti-login"></i>
                                 <span class="hide-menu">Login</span>
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" asp-area="" asp-controller="Home" asp-action="AuthenticationRegister" aria-expanded="false">
+                            <a class="sidebar-link" asp-area="" asp-controller="Account" asp-action="SignUp" aria-expanded="false">
                                 <i class="ti ti-user-plus"></i>
                                 <span class="hide-menu">Register</span>
                             </a>

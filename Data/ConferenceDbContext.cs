@@ -27,8 +27,7 @@ namespace Code_Academy___Conference_Management_System.Data
                 entity.Property(e => e.Description)
                       .HasMaxLength(1000);
 
-                entity.Property(e => e.Date)
-                      .IsRequired();
+               
 
                 entity.HasOne(e => e.Location)
                       .WithMany()

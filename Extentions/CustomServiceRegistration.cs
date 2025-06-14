@@ -9,10 +9,10 @@ namespace Code_Academy___Conference_Management_System.Extentions
     {
         public static void AddCustomServices(this IServiceCollection services)
         {
-            services.AddScoped<IInvitationRepository, InvitationRepository>();
-            //services.AddScoped<IEventRepository, EventRepository>();
-           // services.AddScoped<IPersonRepository, PersonRepository>();
-            
+            services.AddScoped<IInvitationService, InvitationService>();
+            services.AddScoped<IEventTypeService, EventTypeService>();
+           
+
         }
     }
 }

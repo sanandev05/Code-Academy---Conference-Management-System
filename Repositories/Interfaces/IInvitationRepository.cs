@@ -5,5 +5,6 @@ namespace Code_Academy___Conference_Management_System.Repositories.Interfaces
 {
     public interface IInvitationRepository :IGenericRepository<Invitation>
     {
+
     }
 }

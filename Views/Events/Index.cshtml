@@ -1,0 +1,376 @@
+﻿@model List<EventVM>
+
+@{
+    // Razor Page Layout istifadə edirsinizsə:
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Tədbirlər";
+}
+
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Code Academy</title>
+    @* Sizin xüsusi CSS faylınız. ~/ qovluq kökünü göstərir *@
+    <link href="~/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-graduation-cap me-2"></i>
+                Code Academy
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Ana Səhifə</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/Events">Tədbirlər</a> @* Controller/Action based navigation *@
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Invitations">Dəvətlər</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Admin">Admin Panel</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user me-1"></i>
+                            Əli Məmmədov @* Dinamik istifadəçi adı *@
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/Profile">Profil</a></li>
+                            <li><a class="dropdown-item" href="/Notifications">Bildirişlər</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/Account/Logout">Çıxış</a></li> @* LogOut action *@
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1 class="display-6">Tədbirlər</h1>
+                <p class="lead text-muted">Code Academy tədbirlərini kəşf edin və iştirak edin</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createEventModal">
+                    <i class="fas fa-plus me-2"></i>Yeni Tədbir
+                </button>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Tədbir Növü</label>
+                                <select id="eventTypeFilter" class="form-select" onchange="filterEvents()">
+                                    <option value="">Hamısı</option>
+                                    @* Modelinizdəki unikal EventType-ları dinamik yükləyin *@
+                                    @if (Model != null)
+                                    {
+                                        @foreach (var eventType in Model.Select(e => e.EventType).DistinctBy(et => et.ID))
+                                        {
+                                            <option value="@eventType.Name.ToLower()">@eventType.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Status</label>
+                                <select id="eventStatusFilter" class="form-select" onchange="filterEvents()">
+                                    <option value="">Hamısı</option>
+                                    <option value="active">Aktiv</option>
+                                    <option value="upcoming">Gözləyir</option>
+                                    <option value="completed">Tamamlandı</option>
+                                    <option value="cancelled">Ləğv edildi</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Tarix</label>
+                                <input type="date" id="eventDateFilter" class="form-control" onchange="filterEvents()">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Axtarış</label>
+                                <div class="input-group">
+                                    <input type="text" id="eventSearch" class="form-control" placeholder="Tədbir adı..." onkeyup="filterEvents()">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="filterEvents()">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" id="eventsGrid">
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var eventItem in Model.OrderBy(e => e.StartDate).ThenBy(e => e.StartTime))
+                {
+                    // Tədbirin statusunu müəyyənləşdirin
+                    var statusBadgeClass = "bg-secondary"; // Default
+                    var statusText = "Tamamlandı";
+                    var actionButtonText = "Ətraflı";
+                    var actionButtonClass = "btn-outline-primary";
+                    var disableButton = false;
+
+                    // Bu hissəni server tərəfdə (controller/service) hesablayıb View Modele əlavə etmək daha yaxşıdır
+                    // Lakin hazırda burada JavaScript üçün uyğun status təyin edək
+                    var currentDateTime = DateTime.Now;
+                    if (eventItem.StartDate > currentDateTime)
+                    {
+                        statusBadgeClass = "bg-warning";
+                        statusText = "Gözləyir";
+                        actionButtonText = "Qeydiyyat"; // Nümunə olaraq
+                        actionButtonClass = "btn-info";
+                    }
+                    else if (eventItem.StartDate <= currentDateTime && eventItem.EndDate >= currentDateTime)
+                    {
+                        statusBadgeClass = "bg-success";
+                        statusText = "Aktiv";
+                        actionButtonText = "Check-in";
+                        actionButtonClass = "btn-primary";
+                    }
+                    // Əlavə statuslar üçün şərtlər əlavə edə bilərsiniz (Ləğv edildi, Sona çatdı)
+                    // Nümunə:
+                    // if (eventItem.IsCancelled) { statusBadgeClass = "bg-danger"; statusText = "Ləğv edildi"; disableButton = true; }
+
+                    // `data-` atributları ilə filtrləmə üçün məlumat əlavə edin
+                    <div class="col-lg-4 col-md-6 mb-4 event-card"
+                         data-event-type="@eventItem.EventType.Name.ToLower()"
+                         data-event-status="@statusText.ToLower()"
+                         data-event-date="@eventItem.StartDate.ToString("yyyy-MM-dd")">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span class="badge @statusBadgeClass">@statusText</span>
+                                <small class="text-muted">@eventItem.EventType.Name</small>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">@eventItem.Title</h5>
+                                <p class="card-text">@eventItem.Description</p>
+                                <div class="mb-3">
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar me-1"></i>
+                                        @eventItem.StartDate.ToString("dd MMMM yyyy")
+                                        @if (eventItem.EndDate != eventItem.StartDate)
+                                        {
+                                            <span> - @eventItem.EndDate.ToString("dd MMMM yyyy")</span>
+                                        }
+                                        <br>
+                                        <i class="fas fa-clock me-1"></i>
+                                        @eventItem.StartTime.ToString(@"hh\:mm") - @eventItem.EndTime.ToString(@"hh\:mm")
+                                        <br>
+                                        <i class="fas fa-map-marker-alt me-1"></i>
+                                        @eventItem.Location.Name, @eventItem.Location.Address
+                                        <br>
+                                        <i class="fas fa-user me-1"></i>
+                                        Təşkilatçı: @eventItem.Organizer.FullName
+                                        @* İştirakçı sayını dinamik göstərmək üçün məlumat yoxdur, buna görə nümunə saxlayırıq *@
+                                        @* <br>
+                                <i class="fas fa-users me-1"></i>X/Y iştirakçı *@
+                                    </small>
+                                </div>
+                                @* Proqress barı üçün məlumat yoxdur, nümunə olaraq statik saxlayırıq *@
+                                <div class="progress mb-3" style="height: 8px;">
+                                    <div class="progress-bar @statusBadgeClass" style="width: @((new Random().Next(30, 100)))%"></div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <div class="d-flex justify-content-between">
+                                    <a href="/Events/Details/@eventItem.ID" class="btn btn-outline-primary btn-sm">Ətraflı</a>
+                                    <button class="btn @actionButtonClass btn-sm" @(disableButton ? "disabled" : "")>@actionButtonText</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12">
+                    <div class="alert alert-info text-center" role="alert">
+                        Hal-hazırda heç bir tədbir yoxdur.
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <nav aria-label="Səhifə naviqasiyası">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Əvvəlki</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Növbəti</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="createEventModal" tabindex="-1" aria-labelledby="createEventModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createEventModalLabel">Yeni Tədbir Yarat</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="eventTitle" class="form-label">Tədbir Adı</label>
+                                <input type="text" class="form-control" id="eventTitle" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="eventType" class="form-label">Tədbir Növü</label>
+                                <select class="form-select" id="eventType" required>
+                                    <option value="">Seçin...</option>
+                                    @* Tədbir növlərini Controller-dən dinamik yükləyin *@
+                                    <option value="conference">Konfrans</option>
+                                    <option value="seminar">Seminar</option>
+                                    <option value="bootcamp">Bootcamp</option>
+                                    <option value="masterclass">Masterclass</option>
+                                    <option value="workshop">Workshop</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="eventDescription" class="form-label">Təsvir</label>
+                            <textarea class="form-control" id="eventDescription" rows="3"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="eventStartDate" class="form-label">Başlama Tarixi</label>
+                                <input type="date" class="form-control" id="eventStartDate" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="eventEndDate" class="form-label">Bitmə Tarixi</label>
+                                <input type="date" class="form-control" id="eventEndDate" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="eventStartTime" class="form-label">Başlama Vaxtı</label>
+                                <input type="time" class="form-control" id="eventStartTime" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="eventEndTime" class="form-label">Bitmə Vaxtı</label>
+                                <input type="time" class="form-control" id="eventEndTime" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="eventLocation" class="form-label">Məkan</label>
+                                <select class="form-select" id="eventLocation" required>
+                                    <option value="">Seçin...</option>
+                                    @* Məkanları Controller-dən dinamik yükləyin *@
+                                    <option value="1">Bakı Mərkəzi</option>
+                                    <option value="2">Gəncə Filialı</option>
+                                    <option value="3">Online</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="eventOrganizer" class="form-label">Təşkilatçı</label>
+                                <select class="form-select" id="eventOrganizer" required>
+                                    <option value="">Seçin...</option>
+                                    @* Təşkilatçıları Controller-dən dinamik yükləyin *@
+                                    <option value="1">Rəşad Həsənov</option>
+                                    <option value="2">Leyla Əliyeva</option>
+                                    <option value="3">Cavid Məmmədov</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ləğv et</button>
+                    <button type="button" class="btn btn-primary">Tədbir Yarat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @* Öz xüsusi Javascript faylınız. ~/ qovluq kökünü göstərir *@
+    <script src="~/js/main.js"></script>
+    <script>
+        function filterEvents() {
+            var searchText = document.getElementById("eventSearch").value.toLowerCase();
+            var eventTypeFilter = document.getElementById("eventTypeFilter").value.toLowerCase();
+            var eventStatusFilter = document.getElementById("eventStatusFilter").value.toLowerCase();
+            var eventDateFilter = document.getElementById("eventDateFilter").value; // YYYY-MM-DD formatında
+
+            var eventCards = document.getElementsByClassName("event-card");
+
+            for (var i = 0; i < eventCards.length; i++) {
+                var card = eventCards[i];
+                var title = card.querySelector(".card-title").innerText.toLowerCase();
+                var type = card.getAttribute("data-event-type");
+                var status = card.getAttribute("data-event-status");
+                var date = card.getAttribute("data-event-date");
+
+                var matchesSearch = title.includes(searchText);
+                var matchesType = (eventTypeFilter === "" || type === eventTypeFilter);
+                var matchesStatus = (eventStatusFilter === "" || status === eventStatusFilter);
+                var matchesDate = (eventDateFilter === "" || date === eventDateFilter);
+
+                if (matchesSearch && matchesType && matchesStatus && matchesDate) {
+                    card.style.display = "";
+                } else {
+                    card.style.display = "none";
+                }
+            }
+        }
+
+        // Səhifə yükləndikdə status filterini cari vaxta görə avtomatik seçmək üçün (isteğe bağlı)
+        // window.onload = function() {
+        //     var currentDate = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+        //     var hasUpcoming = false;
+        //     var hasActive = false;
+        //     var hasCompleted = false;
+
+        //     var eventCards = document.getElementsByClassName("event-card");
+        //     for (var i = 0; i < eventCards.length; i++) {
+        //         var status = eventCards[i].getAttribute("data-event-status");
+        //         if (status === "gözləyir") hasUpcoming = true;
+        //         if (status === "aktiv") hasActive = true;
+        //         if (status === "tamamlandı") hasCompleted = true;
+        //     }
+
+        //     var statusFilter = document.getElementById("eventStatusFilter");
+        //     if (hasActive) {
+        //         statusFilter.value = "aktiv";
+        //     } else if (hasUpcoming) {
+        //         statusFilter.value = "gözləyir";
+        //     } else if (hasCompleted) {
+        //         statusFilter.value = "tamamlandı";
+        //     }
+        //     filterEvents(); // Filtri tətbiq et
+        // };
+    </script>
+</body>
+</html>

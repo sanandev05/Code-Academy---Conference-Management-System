@@ -1,16 +1,18 @@
 ﻿using Code_Academy___Conference_Management_System.Models;
+using Code_Academy___Conference_Management_System.Repositories.Interfaces;
 using Code_Academy___Conference_Management_System.Services.Interfaces;
 
 namespace Code_Academy___Conference_Management_System.Services
 {
     public class InvitationService : IInvitationService
     {
-        private readonly IInvitationService _invitationService;
-        public InvitationService(IInvitationService invitationService)
+        private readonly IInvitationRepository _invitationRepository;
+        public InvitationService(IInvitationRepository invitationRepository)
         {
-            _invitationService = invitationService;
-            
+            _invitationRepository = invitationRepository;
+
         }
+
         public Task<InvitationVM> AddAsync(InvitationVM model)
         {
             throw new NotImplementedException();
@@ -21,11 +23,9 @@ namespace Code_Academy___Conference_Management_System.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<InvitationVM>> GetAllAsync()
+        public Task<IEnumerable<InvitationVM>> GetAllAsync()
         {
-           var datas = await _invitationService.GetAllAsync();
-
-            return datas;
+            throw new NotImplementedException();
         }
 
         public Task<InvitationVM> GetByIdAsync(int id)
