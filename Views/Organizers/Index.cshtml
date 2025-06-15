@@ -1,0 +1,213 @@
+﻿@model Code_Academy___Conference_Management_System.Models.CreateNewOrganizerVM
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Təşkilatçılar";
+}
+
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Code Academy</title>
+    <link href="~/css/style.css" rel="stylesheet">
+    <style>
+        /* Table Styling */
+        .table-organizers th, .table-organizers td {
+            vertical-align: middle;
+        }
+
+        .table-organizers thead th {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .action-buttons .btn {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1 class="display-6">Təşkilatçılar</h1>
+                <p class="lead text-muted">Mövcud təşkilatçıları idarə edin.</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createOrganizerModal">
+                    <i class="fas fa-plus me-2"></i>Yeni Təşkilatçı Əlavə Et
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        @if (Model.Organizers != null && Model.Organizers.Any())
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-hover table-organizers">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#ID</th>
+                                            <th scope="col">Tam Adı</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Əməliyyatlar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var organizer in Model.Organizers.OrderBy(o => o.FullName))
+                                        {
+                                            <tr id="organizer_@organizer.ID">
+                                                <td>@organizer.ID</td>
+                                                <td class="organizer-fullname">@organizer.FullName</td>
+                                                <td class="organizer-email">@organizer.Email</td>
+                                                <td class="action-buttons">
+                                                    <button class="btn btn-outline-info btn-sm edit-btn"
+                                                            data-id="@organizer.ID"
+                                                            data-fullname="@organizer.FullName"
+                                                            data-email="@organizer.Email"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#editOrganizerModal">
+                                                        <i class="fas fa-edit"></i> Redaktə Et
+                                                    </button>
+                                                    <button class="btn btn-outline-danger btn-sm delete-btn"
+                                                            data-id="@organizer.ID"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#deleteOrganizerModal">
+                                                        <i class="fas fa-trash-alt"></i> Sil
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-info text-center" role="alert">
+                                Hal-hazırda heç bir təşkilatçı əlavə edilməyib.
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="createOrganizerModal" tabindex="-1" aria-labelledby="createOrganizerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createOrganizerModalLabel">Yeni Təşkilatçı Əlavə Et</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form asp-controller="Organizers" asp-action="Create" method="post">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label asp-for="OrganizerVM.FullName" class="form-label"></label>
+                            <input asp-for="OrganizerVM.FullName" class="form-control" />
+                            <span asp-validation-for="OrganizerVM.FullName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="OrganizerVM.Email" class="form-label"></label>
+                            <input asp-for="OrganizerVM.Email" class="form-control" type="email" />
+                            <span asp-validation-for="OrganizerVM.Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ləğv et</button>
+                        <button type="submit" class="btn btn-primary">Əlavə Et</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editOrganizerModal" tabindex="-1" aria-labelledby="editOrganizerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-controller="Organizers" asp-action="Edit" method="post" id="editOrganizerForm">
+                    @Html.AntiForgeryToken()
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editOrganizerModalLabel">Təşkilatçını Redaktə Et</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" asp-for="OrganizerVM.ID" name="OrganizerVM.ID" id="editOrganizerId" />
+                        <div class="mb-3">
+                            <label asp-for="OrganizerVM.FullName" class="form-label"></label>
+                            <input asp-for="OrganizerVM.FullName" class="form-control" id="editOrganizerFullName" />
+                            <span asp-validation-for="OrganizerVM.FullName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="OrganizerVM.Email" class="form-label"></label>
+                            <input asp-for="OrganizerVM.Email" class="form-control" type="email" id="editOrganizerEmail" />
+                            <span asp-validation-for="OrganizerVM.Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ləğv et</button>
+                        <button type="submit" class="btn btn-primary">Yadda saxla</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteOrganizerModal" tabindex="-1" aria-labelledby="deleteOrganizerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-controller="Organizers" asp-action="Delete" method="post" id="deleteOrganizerForm">
+                    @Html.AntiForgeryToken()
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteOrganizerModalLabel">Təşkilatçını Sil</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Siz əminsiniz bu təşkilatçını silməyə?</p>
+                        <input type="hidden" name="id" id="deleteOrganizerId" value="" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ləğv et</button>
+                        <button type="submit" class="btn btn-danger">Sil</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/js/main.js"></script>
+    <script>
+        // Populate Edit Organizer Modal
+        $('#editOrganizerModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('id');
+            var fullName = button.data('fullname');
+            var email = button.data('email');
+
+            var modal = $(this);
+            modal.find('#editOrganizerId').val(id);
+            modal.find('#editOrganizerFullName').val(fullName);
+            modal.find('#editOrganizerEmail').val(email);
+        });
+
+        // Populate Delete Organizer Modal
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const id = this.getAttribute('data-id');
+                document.getElementById('deleteOrganizerId').value = id;
+
+                const deleteModal = new bootstrap.Modal(document.getElementById('deleteOrganizerModal'));
+                deleteModal.show();
+            });
+        });
+    </script>
+</body>
+</html>

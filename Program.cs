@@ -1,5 +1,6 @@
 using Code_Academy___Conference_Management_System.Data;
 using Code_Academy___Conference_Management_System.Extentions;
+using Code_Academy___Conference_Management_System.Profiles;
 using Code_Academy___Conference_Management_System.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ builder.Services.AddDbContext<ConferenceDbContext>(options => {
 builder.Services.AddIdentity<UserIdentity, IdentityRole>()
     .AddEntityFrameworkStores<ConferenceDbContext>()
     .AddDefaultTokenProviders();
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 builder.Services.AddCustomRepositories();
 builder.Services.AddCustomServices();

@@ -33,13 +33,16 @@ namespace Code_Academy___Conference_Management_System.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("EventTypeId")
                         .HasColumnType("int");
@@ -52,6 +55,12 @@ namespace Code_Academy___Conference_Management_System.Migrations
 
                     b.Property<int>("OrganizerId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -69,7 +78,7 @@ namespace Code_Academy___Conference_Management_System.Migrations
 
                     b.HasIndex("OrganizerId");
 
-                    b.ToTable("Event");
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("Code_Academy___Conference_Management_System.Entities.EventType", b =>
@@ -96,7 +105,7 @@ namespace Code_Academy___Conference_Management_System.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("EventType");
+                    b.ToTable("EventTypes");
                 });
 
             modelBuilder.Entity("Code_Academy___Conference_Management_System.Entities.Feedback", b =>
@@ -140,7 +149,7 @@ namespace Code_Academy___Conference_Management_System.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Feedback");
+                    b.ToTable("Feedbacks");
                 });
 
             modelBuilder.Entity("Code_Academy___Conference_Management_System.Entities.Invitation", b =>
@@ -179,7 +188,7 @@ namespace Code_Academy___Conference_Management_System.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Invitation");
+                    b.ToTable("Invitations");
                 });
 
             modelBuilder.Entity("Code_Academy___Conference_Management_System.Entities.Location", b =>
@@ -214,7 +223,7 @@ namespace Code_Academy___Conference_Management_System.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Location");
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("Code_Academy___Conference_Management_System.Entities.Notification", b =>
@@ -249,7 +258,7 @@ namespace Code_Academy___Conference_Management_System.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("Notification");
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Code_Academy___Conference_Management_System.Entities.Organizer", b =>
@@ -280,7 +289,7 @@ namespace Code_Academy___Conference_Management_System.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Organizer");
+                    b.ToTable("Organizers");
                 });
 
             modelBuilder.Entity("Code_Academy___Conference_Management_System.Entities.Participation", b =>
@@ -315,7 +324,7 @@ namespace Code_Academy___Conference_Management_System.Migrations
 
                     b.HasIndex("InvitationId");
 
-                    b.ToTable("Participation");
+                    b.ToTable("Participations");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

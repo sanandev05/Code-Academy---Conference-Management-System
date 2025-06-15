@@ -55,7 +55,7 @@ namespace Code_Academy___Conference_Management_System.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EventType",
+                name: "EventTypes",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
@@ -67,11 +67,11 @@ namespace Code_Academy___Conference_Management_System.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EventType", x => x.ID);
+                    table.PrimaryKey("PK_EventTypes", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Location",
+                name: "Locations",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
@@ -85,11 +85,11 @@ namespace Code_Academy___Conference_Management_System.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Location", x => x.ID);
+                    table.PrimaryKey("PK_Locations", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Organizer",
+                name: "Organizers",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
@@ -102,7 +102,7 @@ namespace Code_Academy___Conference_Management_System.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Organizer", x => x.ID);
+                    table.PrimaryKey("PK_Organizers", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -212,14 +212,17 @@ namespace Code_Academy___Conference_Management_System.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Event",
+                name: "Events",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LocationId = table.Column<int>(type: "int", nullable: false),
                     EventTypeId = table.Column<int>(type: "int", nullable: false),
                     OrganizerId = table.Column<int>(type: "int", nullable: false),
@@ -229,29 +232,29 @@ namespace Code_Academy___Conference_Management_System.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Event", x => x.ID);
+                    table.PrimaryKey("PK_Events", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Event_EventType_EventTypeId",
+                        name: "FK_Events_EventTypes_EventTypeId",
                         column: x => x.EventTypeId,
-                        principalTable: "EventType",
+                        principalTable: "EventTypes",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Event_Location_LocationId",
+                        name: "FK_Events_Locations_LocationId",
                         column: x => x.LocationId,
-                        principalTable: "Location",
+                        principalTable: "Locations",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Event_Organizer_OrganizerId",
+                        name: "FK_Events_Organizers_OrganizerId",
                         column: x => x.OrganizerId,
-                        principalTable: "Organizer",
+                        principalTable: "Organizers",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Feedback",
+                name: "Feedbacks",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
@@ -267,23 +270,23 @@ namespace Code_Academy___Conference_Management_System.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Feedback", x => x.ID);
+                    table.PrimaryKey("PK_Feedbacks", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Feedback_AspNetUsers_UserId",
+                        name: "FK_Feedbacks_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Feedback_Event_EventId",
+                        name: "FK_Feedbacks_Events_EventId",
                         column: x => x.EventId,
-                        principalTable: "Event",
+                        principalTable: "Events",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Invitation",
+                name: "Invitations",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
@@ -298,23 +301,23 @@ namespace Code_Academy___Conference_Management_System.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Invitation", x => x.ID);
+                    table.PrimaryKey("PK_Invitations", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Invitation_AspNetUsers_UserId",
+                        name: "FK_Invitations_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Invitation_Event_EventId",
+                        name: "FK_Invitations_Events_EventId",
                         column: x => x.EventId,
-                        principalTable: "Event",
+                        principalTable: "Events",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Notification",
+                name: "Notifications",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
@@ -328,17 +331,17 @@ namespace Code_Academy___Conference_Management_System.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Notification", x => x.ID);
+                    table.PrimaryKey("PK_Notifications", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Notification_Event_EventId",
+                        name: "FK_Notifications_Events_EventId",
                         column: x => x.EventId,
-                        principalTable: "Event",
+                        principalTable: "Events",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Participation",
+                name: "Participations",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
@@ -352,11 +355,11 @@ namespace Code_Academy___Conference_Management_System.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Participation", x => x.ID);
+                    table.PrimaryKey("PK_Participations", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Participation_Invitation_InvitationId",
+                        name: "FK_Participations_Invitations_InvitationId",
                         column: x => x.InvitationId,
-                        principalTable: "Invitation",
+                        principalTable: "Invitations",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -401,48 +404,48 @@ namespace Code_Academy___Conference_Management_System.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Event_EventTypeId",
-                table: "Event",
+                name: "IX_Events_EventTypeId",
+                table: "Events",
                 column: "EventTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Event_LocationId",
-                table: "Event",
+                name: "IX_Events_LocationId",
+                table: "Events",
                 column: "LocationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Event_OrganizerId",
-                table: "Event",
+                name: "IX_Events_OrganizerId",
+                table: "Events",
                 column: "OrganizerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Feedback_EventId",
-                table: "Feedback",
+                name: "IX_Feedbacks_EventId",
+                table: "Feedbacks",
                 column: "EventId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Feedback_UserId",
-                table: "Feedback",
+                name: "IX_Feedbacks_UserId",
+                table: "Feedbacks",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Invitation_EventId",
-                table: "Invitation",
+                name: "IX_Invitations_EventId",
+                table: "Invitations",
                 column: "EventId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Invitation_UserId",
-                table: "Invitation",
+                name: "IX_Invitations_UserId",
+                table: "Invitations",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notification_EventId",
-                table: "Notification",
+                name: "IX_Notifications_EventId",
+                table: "Notifications",
                 column: "EventId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Participation_InvitationId",
-                table: "Participation",
+                name: "IX_Participations_InvitationId",
+                table: "Participations",
                 column: "InvitationId");
         }
 
@@ -465,34 +468,34 @@ namespace Code_Academy___Conference_Management_System.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Feedback");
+                name: "Feedbacks");
 
             migrationBuilder.DropTable(
-                name: "Notification");
+                name: "Notifications");
 
             migrationBuilder.DropTable(
-                name: "Participation");
+                name: "Participations");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Invitation");
+                name: "Invitations");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Event");
+                name: "Events");
 
             migrationBuilder.DropTable(
-                name: "EventType");
+                name: "EventTypes");
 
             migrationBuilder.DropTable(
-                name: "Location");
+                name: "Locations");
 
             migrationBuilder.DropTable(
-                name: "Organizer");
+                name: "Organizers");
         }
     }
 }

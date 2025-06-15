@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Code_Academy___Conference_Management_System.Data;
 using Code_Academy___Conference_Management_System.Entities;
 using Code_Academy___Conference_Management_System.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -7,10 +8,10 @@ namespace Code_Academy___Conference_Management_System.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity, new()
     {
-        private readonly DbContext _context;
+        private readonly ConferenceDbContext _context;
         private readonly DbSet<T> _dbSet;
 
-        public GenericRepository(DbContext context)
+        public GenericRepository(ConferenceDbContext context)
         {
             _context = context;
             _dbSet = context.Set<T>();

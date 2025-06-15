@@ -11,6 +11,14 @@ namespace Code_Academy___Conference_Management_System.Data
             : base(options)
         {
         }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<EventType> EventTypes { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<Invitation> Invitations { get; set; }
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Organizer> Organizers { get; set; }
+        public DbSet<Participation> Participations { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

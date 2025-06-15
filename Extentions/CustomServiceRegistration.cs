@@ -11,6 +11,8 @@ namespace Code_Academy___Conference_Management_System.Extentions
         {
             services.AddScoped<IInvitationService, InvitationService>();
             services.AddScoped<IEventTypeService, EventTypeService>();
+            services.AddScoped<IOrganizerService, Organizer_Service>();
+            services.AddScoped<ILocationService, LocationService>();
            
 
         }
