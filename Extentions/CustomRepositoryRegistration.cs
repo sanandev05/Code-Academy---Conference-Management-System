@@ -14,6 +14,7 @@ namespace Code_Academy___Conference_Management_System.Extentions
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped(typeof(IGenericRepository<Organizer>), typeof(GenericRepository<Organizer>));
             services.AddScoped(typeof(IGenericRepository<Location>), typeof(GenericRepository<Location>));
+            services.AddScoped(typeof(IGenericRepository<Event>), typeof(GenericRepository<Event>));
 
         }
     }

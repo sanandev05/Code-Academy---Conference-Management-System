@@ -10,9 +10,12 @@ namespace Code_Academy___Conference_Management_System.Profiles
         {
             CreateMap<Event, EventVM>().ReverseMap();
             CreateMap<Location, LocationVM>().ReverseMap();
-            CreateMap<EventType, EventTypeVM>().ReverseMap();
             CreateMap<Organizer, OrganizerVM>().ReverseMap();
             CreateMap<Invitation, InvitationVM>().ReverseMap();
+            CreateMap<Event, EventVM>().ReverseMap();
+    
+           
+
         }
     }
 }

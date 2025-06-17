@@ -3,76 +3,66 @@ using Code_Academy___Conference_Management_System.Entities;
 using Code_Academy___Conference_Management_System.Models;
 using Code_Academy___Conference_Management_System.Repositories.Interfaces;
 using Code_Academy___Conference_Management_System.Services.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace Code_Academy___Conference_Management_System.Services
 {
-    public class OrganizerService : IOrganizerService
+    public class EventService : IEventService
     {
-        private readonly IGenericRepository<Organizer> _organizerRepository;
+        private readonly IGenericRepository<Event> _eventRepository;
         private readonly IMapper _mapper;
 
-        // If Organizer had navigation properties you needed to include, you'd define them here.
-        private readonly Expression<Func<Organizer, object>>[] _includes = new Expression<Func<Organizer, object>>[] { };
+        private readonly Expression<Func<Event, object>>[] _includes = new Expression<Func<Event, object>>[] { };
 
-        public OrganizerService(IGenericRepository<Organizer> organizerRepository, IMapper mapper)
+        public EventService(IGenericRepository<Event> eventRepository, IMapper mapper)
         {
-            _organizerRepository = organizerRepository;
+            _eventRepository = eventRepository;
             _mapper = mapper;
         }
 
-        public async Task<OrganizerVM> AddAsync(OrganizerVM model)
+        public async Task<EventVM> AddAsync(EventVM model)
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
 
-            var entity = _mapper.Map<Organizer>(model);
+            var entity = _mapper.Map<Event>(model);
+            await _eventRepository.AddAsync(entity);
 
-            await _organizerRepository.AddAsync(entity);
+            var createdEntity = await _eventRepository.GetByIdAsync(entity.ID, _includes);
 
-            var createdEntity = await _organizerRepository.GetByIdAsync(entity.ID, _includes);
-
-            return _mapper.Map<OrganizerVM>(createdEntity);
+            return _mapper.Map<EventVM>(createdEntity);
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var existing = await _organizerRepository.GetByIdAsync(id);
+            var existing = await _eventRepository.GetByIdAsync(id);
             if (existing == null) return false;
 
-            await _organizerRepository.SoftDeleteAsync(id);
+            await _eventRepository.SoftDeleteAsync(id);
             return true;
         }
 
-        public async Task<IEnumerable<OrganizerVM>> GetAllAsync()
+        public async Task<IEnumerable<EventVM>> GetAllAsync()
         {
-            var entities = await _organizerRepository.GetAllAsync(_includes);
-
-            return _mapper.Map<IEnumerable<OrganizerVM>>(entities);
+            var entities = await _eventRepository.GetAllAsync(_includes);
+            return _mapper.Map<IEnumerable<EventVM>>(entities);
         }
 
-        public async Task<OrganizerVM> GetByIdAsync(int id)
+        public async Task<EventVM> GetByIdAsync(int id)
         {
-            var entity = await _organizerRepository.GetByIdAsync(id, _includes);
-
-            if (entity == null) return null;
-
-            return _mapper.Map<OrganizerVM>(entity);
+            var entity = await _eventRepository.GetByIdAsync(id, _includes);
+            return entity == null ? null : _mapper.Map<EventVM>(entity);
         }
 
-        public async Task UpdateAsync(OrganizerVM model)
+        public async Task UpdateAsync(EventVM model)
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
 
-            var entity = await _organizerRepository.GetByIdAsync(model.ID);
+            var entity = await _eventRepository.GetByIdAsync(model.ID);
             if (entity == null)
-                throw new KeyNotFoundException($"Organizer with id {model.ID} not found.");
+                throw new KeyNotFoundException($"Event with id {model.ID} not found.");
 
             _mapper.Map(model, entity);
-
-            await _organizerRepository.UpdateAsync(entity);
+            await _eventRepository.UpdateAsync(entity);
         }
     }
 }

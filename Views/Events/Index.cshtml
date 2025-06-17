@@ -1,307 +1,169 @@
-﻿@model Code_Academy___Conference_Management_System.Models.CreateNewEventVM
+﻿@model CreateNewEventVM
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Tədbirlər";
 }
+<style>
+    /* Table Styling */
+    .table-event-types th, .table-event-types td {
+        vertical-align: middle;
+    }
 
-<!DOCTYPE html>
-<html lang="az">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>@ViewData["Title"] - Code Academy</title>
-    <link href="~/css/style.css" rel="stylesheet" />
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <i class="fas fa-graduation-cap me-2"></i>
-                Code Academy
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="/">Ana Səhifə</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/Events">Tədbirlər</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/Invitations">Dəvətlər</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/Admin">Admin Panel</a></li>
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user me-1"></i>Əli Məmmədov
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/Profile">Profil</a></li>
-                            <li><a class="dropdown-item" href="/Notifications">Bildirişlər</a></li>
-                            <li><hr class="dropdown-divider" /></li>
-                            <li><a class="dropdown-item" href="/Account/Logout">Çıxış</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    .table-event-types thead th {
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+    }
 
-    <div class="container mt-4">
-        <div class="row mb-4">
-            <div class="col-md-8">
-                <h1 class="display-6">Tədbirlər</h1>
-                <p class="lead text-muted">Code Academy tədbirlərini kəşf edin və iştirak edin</p>
-            </div>
-            <div class="col-md-4 text-md-end">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createEventModal">
-                    <i class="fas fa-plus me-2"></i>Yeni Tədbir
-                </button>
-            </div>
-        </div>
+    .action-buttons .btn {
+        margin-right: 5px;
+    }
+    
+</style>
+<div class="container mt-4">
+    <h2 class="mb-3">Tədbirlər</h2>
 
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row g-3">
-                            <div class="col-md-3">
-                                <label class="form-label">Tədbir Növü</label>
-                                <select id="eventTypeFilter" class="form-select" onchange="filterEvents()">
-                                    <option value="">Hamısı</option>
-                                    @if (Model.EventVMs != null)
-                                    {
-                                        var distinctTypes = Model.EventVMs
-                                        .Where(e => e.EventType != null)
-                                        .GroupBy(e => e.EventType.ID)
-                                        .Select(g => g.First().EventType);
+    <!-- Create Button -->
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#eventModal">+ Tədbir əlavə et</button>
 
-                                        foreach (var eventType in distinctTypes)
-                                        {
-                                            <option value="@eventType.Name.ToLower()">@eventType.Name</option>
-                                        }
-                                    }
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Status</label>
-                                <select id="eventStatusFilter" class="form-select" onchange="filterEvents()">
-                                    <option value="">Hamısı</option>
-                                    <option value="active">Aktiv</option>
-                                    <option value="upcoming">Gözləyir</option>
-                                    <option value="completed">Tamamlandı</option>
-                                    <option value="cancelled">Ləğv edildi</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Tarix</label>
-                                <input type="date" id="eventDateFilter" class="form-control" onchange="filterEvents()" />
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Axtarış</label>
-                                <div class="input-group">
-                                    <input type="text" id="eventSearch" class="form-control" placeholder="Tədbir adı..." onkeyup="filterEvents()" />
-                                    <button class="btn btn-outline-secondary" type="button" onclick="filterEvents()">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row" id="eventsGrid">
-            @if (Model.EventVMs != null && Model.EventVMs.Any())
-            {
-                foreach (var eventItem in Model.EventVMs.OrderBy(e => e.StartDate).ThenBy(e => e.StartTime))
+    <!-- Event Table -->
+    @if (Model.EventVMs != null && Model.EventVMs.Any() &&
+    Model.EventTypes != null && Model.Locations != null && Model.Organizers != null)
+    {
+        <table class="table table-hover table-event-types">
+            <thead>
+                <tr>
+                    <th>Başlıq</th>
+                    <th>Təsvir</th>
+                    <th>Tarix</th>
+                    <th>Vaxt</th>
+                    <th>Tip</th>
+                    <th>Məkan</th>
+                    <th>Təşkilatçı</th>
+                    <th>Əməliyyatlar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ev in Model.EventVMs)
                 {
-                    var statusBadgeClass = "bg-secondary";
-                    var statusText = "Tamamlandı";
-                    var actionButtonText = "Ətraflı";
-                    var actionButtonClass = "btn-outline-primary";
-                    var disableButton = false;
+                    <tr>
+                        <td>@ev.Title</td>
+                        <td>@ev.Description</td>
+                        <td>@ev.StartDate.ToShortDateString() - @ev.EndDate.ToShortDateString()</td>
+                        <td>@ev.StartTime.ToString("hh\\:mm") - @ev.EndTime.ToString("hh\\:mm")</td>
+                        <td>@Model.EventTypes.FirstOrDefault(e => e.ID == ev.EventTypeId)?.Name</td>
+                        <td>@Model.Locations.FirstOrDefault(l => l.ID == ev.LocationId)?.Name</td>
+                        <td>@Model.Organizers.FirstOrDefault(o => o.ID == ev.OrganizerId)?.FullName</td>
+                        <td>
+                            <!-- Edit button triggers modal and fills form -->
+                            <button type="button" class="btn btn-sm btn-warning"
+                                    data-bs-toggle="modal" data-bs-target="#eventModal"
+                                    data-id="@ev.ID"
+                                    data-title="@ev.Title"
+                                    data-description="@ev.Description"
+                                    data-startdate="@ev.StartDate.ToString("yyyy-MM-dd")"
+                                    data-enddate="@ev.EndDate.ToString("yyyy-MM-dd")"
+                                    data-starttime="@ev.StartTime.ToString(@"hh\:mm")"
+                                    data-endtime="@ev.EndTime.ToString(@"hh\:mm")"
+                                    data-eventtypeid="@ev.EventTypeId"
+                                    data-locationid="@ev.LocationId"
+                                    data-organizerid="@ev.OrganizerId"
+                                    onclick="populateEditModal(this)">
+                                Düzəlt
+                            </button>
 
-                    var currentDateTime = DateTime.Now;
-                    if (eventItem.StartDate > currentDateTime)
-                    {
-                        statusBadgeClass = "bg-warning";
-                        statusText = "Gözləyir";
-                        actionButtonText = "Qeydiyyat";
-                        actionButtonClass = "btn-info";
-                    }
-                    else if (eventItem.StartDate <= currentDateTime && eventItem.EndDate >= currentDateTime)
-                    {
-                        statusBadgeClass = "bg-success";
-                        statusText = "Aktiv";
-                        actionButtonText = "Check-in";
-                        actionButtonClass = "btn-primary";
-                    }
-
-                    <div class="col-lg-4 col-md-6 mb-4 event-card"
-                         data-event-type="@eventItem.EventType.Name.ToLower()"
-                         data-event-status="@statusText.ToLower()"
-                         data-event-date="@eventItem.StartDate.ToString("yyyy-MM-dd")">
-                        <div class="card h-100 shadow-sm">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <span class="badge @statusBadgeClass">@statusText</span>
-                                <small class="text-muted">@eventItem.EventType.Name</small>
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">@eventItem.Title</h5>
-                                <p class="card-text">@eventItem.Description</p>
-                                <div class="mb-3">
-                                    <small class="text-muted">
-                                        <i class="fas fa-calendar me-1"></i>
-                                        @eventItem.StartDate.ToString("dd MMMM yyyy")
-                                        @if (eventItem.EndDate != eventItem.StartDate)
-                                        {
-                                            <span> - @eventItem.EndDate.ToString("dd MMMM yyyy")</span>
-                                        }
-                                        <br />
-                                        <i class="fas fa-clock me-1"></i>
-                                        @eventItem.StartTime.ToString(@"hh\:mm") - @eventItem.EndTime.ToString(@"hh\:mm")
-                                        <br />
-                                        <i class="fas fa-map-marker-alt me-1"></i>
-                                        @eventItem.Location.Name, @eventItem.Location.Address
-                                        <br />
-                                        <i class="fas fa-user me-1"></i>
-                                        Təşkilatçı: @eventItem.Organizer.FullName
-                                    </small>
-                                </div>
-                                <div class="progress mb-3" style="height: 8px;">
-                                    <div class="progress-bar @statusBadgeClass" style="width: @(new Random().Next(30, 100))%"></div>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-transparent">
-                                <div class="d-flex justify-content-between">
-                                    <a href="/Events/Details/@eventItem.ID" class="btn btn-outline-primary btn-sm">Ətraflı</a>
-                                    <button class="btn @actionButtonClass btn-sm" @(disableButton ? "disabled" : "")>@actionButtonText</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                            <!-- Delete button triggers delete confirm modal -->
+                            <button type="button" class="btn btn-sm btn-danger"
+                                    data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                    data-id="@ev.ID"
+                                    data-title="@ev.Title"
+                                    onclick="populateDeleteModal(this)">
+                                Sil
+                            </button>
+                        </td>
+                    </tr>
                 }
-            }
-            else
-            {
-                <div class="col-12">
-                    <div class="alert alert-info text-center" role="alert">
-                        Hal-hazırda heç bir tədbir yoxdur.
-                    </div>
-                </div>
-            }
-        </div>
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info">Tədbir yoxdur.</div>
+    }
 
-        <div class="row mt-4">
-            <div class="col-12">
-                <nav aria-label="Səhifə naviqasiyası">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Əvvəlki</a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Növbəti</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="createEventModal" tabindex="-1" aria-labelledby="createEventModalLabel" aria-hidden="true">
+    <!-- Create/Edit Modal (your existing modal with a hidden ID field and updated form action) -->
+    <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="createEventModalLabel">Yeni Tədbir Yarat</h5>
+                    <h5 class="modal-title" id="eventModalLabel">Yeni Tədbir</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="eventTitle" class="form-label">Tədbir Adı</label>
-                                <input asp-for="EventVM.Title" type="text" class="form-control" id="eventTitle" required />
+                    <form id="eventForm" method="post" asp-action="Create">
+                        <input type="hidden" id="EventId" name="EventVM.ID" />
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <label>Başlıq</label>
+                                <input class="form-control" name="EventVM.Title" id="EventTitle" />
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="eventType" class="form-label">Tədbir Növü</label>
-                                <select asp-for="EventVM.EventType.ID" class="form-select" id="eventType" required>
-                                    <option value="">Seçin...</option>
-                                    @* Dynamically populate event types *@
-                                    @* Assuming you add List<EventType> EventTypes in your CreateNewEventVM *@
-                                    @if (Model.EventVMs != null)
-                                    {
-                                        foreach (var type in Model.EventVMs)
-                                        {
-                                            <option value="@type.ID">@type.Description</option>
-                                        }
-                                    }
-                                </select>
+                            <div class="col-md-6">
+                                <label>Təsvir</label>
+                                <input class="form-control" name="EventVM.Description" id="EventDescription" />
                             </div>
                         </div>
-
-                        <div class="mb-3">
-                            <label for="eventDescription" class="form-label">Təsvir</label>
-                            <textarea asp-for="EventVM.Description" class="form-control" id="eventDescription" rows="3"></textarea>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="eventLocation" class="form-label">Məkan</label>
-                                <select asp-for="EventVM.Location.ID" class="form-select" id="eventLocation" required>
-                                    <option value="">Seçin...</option>
-                                    @* Assuming List<Location> Locations in your model *@
-                                    @if (Model.Locations != null)
-                                    {
-                                        foreach (var loc in Model.Locations)
-                                        {
-                                            <option value="@loc.ID">@loc.Name</option>
-                                        }
-                                    }
-                                </select>
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <label>Başlanğıc tarixi</label>
+                                <input type="date" class="form-control" name="EventVM.StartDate" id="EventStartDate" />
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="eventOrganizer" class="form-label">Təşkilatçı</label>
-                                <select asp-for="EventVM.Organizer.ID" class="form-select" id="eventOrganizer" required>
-                                    <option value="">Seçin...</option>
-                                    @* Assuming List<Organizer> Organizers in your model *@
-                                    @if (Model.Organizers != null)
-                                    {
-                                        foreach (var org in Model.Organizers)
-                                        {
-                                            <option value="@org.ID">@org.FullName</option>
-                                        }
-                                    }
-                                </select>
+                            <div class="col-md-6">
+                                <label>Bitmə tarixi</label>
+                                <input type="date" class="form-control" name="EventVM.EndDate" id="EventEndDate" />
                             </div>
                         </div>
-
-                        <div class="row">
-                            <div class="col-md-3 mb-3">
-                                <label for="startDate" class="form-label">Başlama Tarixi</label>
-                                <input asp-for="EventVM.StartDate" type="date" class="form-control" id="startDate" required />
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <label>Başlanğıc vaxtı</label>
+                                <input type="time" class="form-control" name="EventVM.StartTime" id="EventStartTime" />
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="startTime" class="form-label">Başlama Vaxtı</label>
-                                <input asp-for="EventVM.StartTime" type="time" class="form-control" id="startTime" required />
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="endDate" class="form-label">Bitmə Tarixi</label>
-                                <input asp-for="EventVM.EndDate" type="date" class="form-control" id="endDate" required />
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="endTime" class="form-label">Bitmə Vaxtı</label>
-                                <input asp-for="EventVM.EndTime" type="time" class="form-control" id="endTime" required />
+                            <div class="col-md-6">
+                                <label>Bitmə vaxtı</label>
+                                <input type="time" class="form-control" name="EventVM.EndTime" id="EventEndTime" />
                             </div>
                         </div>
-
-                        <div class="mb-3 text-end">
-                            <button type="submit" class="btn btn-success">Yarat</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İmtina</button>
+                        <div class="mb-2">
+                            <label>Tip</label>
+                            <select class="form-select" name="EventVM.EventTypeId" id="EventTypeId">
+                                <option value="">-- Seçin --</option>
+                                @foreach (var type in Model.EventTypes!)
+                                {
+                                    <option value="@type.ID">@type.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label>Məkan</label>
+                            <select class="form-select" name="EventVM.LocationId" id="LocationId">
+                                <option value="">-- Seçin --</option>
+                                @foreach (var loc in Model.Locations!)
+                                {
+                                    <option value="@loc.ID">@loc.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label>Təşkilatçı</label>
+                            <select class="form-select" name="EventVM.OrganizerId" id="OrganizerId">
+                                <option value="">-- Seçin --</option>
+                                @foreach (var org in Model.Organizers!)
+                                {
+                                    <option value="@org.ID">@org.FullName</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success" id="saveBtn">Yadda saxla</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bağla</button>
                         </div>
                     </form>
                 </div>
@@ -309,36 +171,75 @@
         </div>
     </div>
 
-    <script>
-        function filterEvents() {
-            const typeFilter = document.getElementById('eventTypeFilter').value.toLowerCase();
-            const statusFilter = document.getElementById('eventStatusFilter').value.toLowerCase();
-            const dateFilter = document.getElementById('eventDateFilter').value;
-            const searchFilter = document.getElementById('eventSearch').value.toLowerCase();
+    <!-- Delete Confirmation Modal (matches your style) -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post" asp-action="Delete">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Təsdiq</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="deleteEventId" />
+                        <p>Seçilmiş "<strong id="deleteEventTitle"></strong>" tədbirini silmək istədiyinizə əminsiniz?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger">Bəli, Sil</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Xeyr</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-            const eventCards = document.querySelectorAll('.event-card');
+<script src="~/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
 
-            eventCards.forEach(card => {
-                const cardType = card.getAttribute('data-event-type');
-                const cardStatus = card.getAttribute('data-event-status');
-                const cardDate = card.getAttribute('data-event-date');
-                const cardTitle = card.querySelector('.card-title').textContent.toLowerCase();
+<script>
+    // Fill edit modal inputs from button data attributes
+    function populateEditModal(button) {
+        document.getElementById('eventModalLabel').textContent = 'Tədbiri Düzəlt';
+        document.getElementById('EventId').value = button.getAttribute('data-id');
+        document.getElementById('EventTitle').value = button.getAttribute('data-title');
+        document.getElementById('EventDescription').value = button.getAttribute('data-description');
+        document.getElementById('EventStartDate').value = button.getAttribute('data-startdate');
+        document.getElementById('EventEndDate').value = button.getAttribute('data-enddate');
+        document.getElementById('EventStartTime').value = button.getAttribute('data-starttime');
+        document.getElementById('EventEndTime').value = button.getAttribute('data-endtime');
+        document.getElementById('EventTypeId').value = button.getAttribute('data-eventtypeid');
+        document.getElementById('LocationId').value = button.getAttribute('data-locationid');
+        document.getElementById('OrganizerId').value = button.getAttribute('data-organizerid');
 
-                const matchesType = !typeFilter || cardType === typeFilter;
-                const matchesStatus = !statusFilter || cardStatus === statusFilter;
-                const matchesDate = !dateFilter || cardDate === dateFilter;
-                const matchesSearch = !searchFilter || cardTitle.includes(searchFilter);
+        // Change form action to Edit
+        document.getElementById('eventForm').setAttribute('action', '/Events/Edit');
+    }
 
-                if (matchesType && matchesStatus && matchesDate && matchesSearch) {
-                    card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+    // Reset modal for creating new event
+    var eventModal = document.getElementById('eventModal');
+    eventModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        if (!button.getAttribute('data-id')) { // if create button (no data-id)
+            document.getElementById('eventModalLabel').textContent = 'Yeni Tədbir';
+            document.getElementById('EventId').value = '';
+            document.getElementById('EventTitle').value = '';
+            document.getElementById('EventDescription').value = '';
+            document.getElementById('EventStartDate').value = '';
+            document.getElementById('EventEndDate').value = '';
+            document.getElementById('EventStartTime').value = '';
+            document.getElementById('EventEndTime').value = '';
+            document.getElementById('EventTypeId').value = '';
+            document.getElementById('LocationId').value = '';
+            document.getElementById('OrganizerId').value = '';
+
+            // Change form action to Create
+            document.getElementById('eventForm').setAttribute('action', '/Events/Create');
         }
-    </script>
+    });
 
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    // Populate delete modal
+    function populateDeleteModal(button) {
+        document.getElementById('deleteEventId').value = button.getAttribute('data-id');
+        document.getElementById('deleteEventTitle').textContent = button.getAttribute('data-title');
+    }
+</script>
