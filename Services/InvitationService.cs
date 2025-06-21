@@ -1,41 +1,83 @@
-﻿using Code_Academy___Conference_Management_System.Models;
+﻿using AutoMapper;
+using Code_Academy___Conference_Management_System.Entities;
+using Code_Academy___Conference_Management_System.Models;
 using Code_Academy___Conference_Management_System.Repositories.Interfaces;
 using Code_Academy___Conference_Management_System.Services.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Code_Academy___Conference_Management_System.Services
 {
     public class InvitationService : IInvitationService
     {
-        private readonly IInvitationRepository _invitationRepository;
-        public InvitationService(IInvitationRepository invitationRepository)
+        private readonly IGenericRepository<Invitation> _invitationRepository;
+        private readonly IMapper _mapper;
+
+        private readonly Expression<Func<Invitation, object>>[] _includes = new Expression<Func<Invitation, object>>[]
+        {
+            i => i.Event,
+            i => i.User
+        };
+
+        public InvitationService(IGenericRepository<Invitation> invitationRepository, IMapper mapper)
         {
             _invitationRepository = invitationRepository;
-
+            _mapper = mapper;
         }
 
-        public Task<InvitationVM> AddAsync(InvitationVM model)
+        public async Task<InvitationVM> AddAsync(InvitationVM model)
         {
-            throw new NotImplementedException();
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
+
+            var allInvitations = await _invitationRepository.GetAllAsync();
+            var exists = allInvitations.Any(i => i.EventId == model.EventId && i.UserId == model.UserId);
+
+            if (exists)
+                throw new InvalidOperationException("This user is already invited to this event.");
+
+            var entity = _mapper.Map<Invitation>(model);
+            await _invitationRepository.AddAsync(entity);
+
+            var created = await _invitationRepository.GetByIdAsync(entity.ID, _includes);
+            return _mapper.Map<InvitationVM>(created);
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var existing = await _invitationRepository.GetByIdAsync(id);
+            if (existing == null) return false;
+
+            await _invitationRepository.SoftDeleteAsync(id);
+            return true;
         }
 
-        public Task<IEnumerable<InvitationVM>> GetAllAsync()
+        public async Task<IEnumerable<InvitationVM>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var invitations = await _invitationRepository.GetAllAsync(_includes);
+            return _mapper.Map<IEnumerable<InvitationVM>>(invitations);
         }
 
-        public Task<InvitationVM> GetByIdAsync(int id)
+        public async Task<InvitationVM> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _invitationRepository.GetByIdAsync(id, _includes);
+            return entity == null ? null : _mapper.Map<InvitationVM>(entity);
         }
 
-        public Task UpdateAsync(InvitationVM model)
+        public async Task UpdateAsync(InvitationVM model)
         {
-            throw new NotImplementedException();
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
+
+            var entity = await _invitationRepository.GetByIdAsync(model.ID);
+            if (entity == null)
+                throw new KeyNotFoundException($"Invitation with ID {model.ID} not found.");
+
+            _mapper.Map(model, entity);
+            await _invitationRepository.UpdateAsync(entity);
         }
     }
 }

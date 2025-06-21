@@ -1,9 +1,139 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-  
+﻿@using Microsoft.AspNetCore.Identity
+@using Code_Academy___Conference_Management_System.User
+@using Code_Academy___Conference_Management_System.Models
+@model Code_Academy___Conference_Management_System.Models.ViewModels.DashboardVM
+@inject SignInManager<UserIdentity> SignInManager
+@inject UserManager<UserIdentity> UserManager
+
+@{
+    ViewData["Title"] = "Ana Səhifə";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- Hero Section -->
+<div class="card bg-light-primary shadow-none">
+    <div class="card-body p-4">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h1 class="fw-semibold mb-3">Flexy Tədbir İdarəetmə Sisteminə Xoş Gəlmisiniz</h1>
+                <p class="mb-4">Tədbirləri asanlıqla kəşf edin, dəvətlərinizi idarə edin və unudulmaz anlar yaşayın.</p>
+
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <a asp-controller="Invitations" asp-action="Index" class="btn btn-primary">Dəvətlərimə Bax</a>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="SignUp" class="btn btn-primary">İndi Qeydiyyatdan Keç</a>
+                    <a asp-controller="Account" asp-action="SignIn" class="btn btn-outline-primary ms-2">Daxil Ol</a>
+                }
+            </div>
+            <div class="col-md-6 text-center d-none d-md-block">
+                <img src="~/assets/images/backgrounds/welcome-bg.svg" alt="Welcome Illustration" class="img-fluid" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Dashboard Stats Cards -->
+<div class="row">
+    <div class="col-md-4">
+        <div class="card border-start border-4 border-primary">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <span class="text-primary bg-light-primary p-2 rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="ti ti-calendar-event fs-6"></i>
+                        </span>
+                    </div>
+                    <div>
+                        <h4 class="mb-0">@Model.UpcomingEventsCount</h4>
+                        <span class="text-muted">Qarşıdan Gələn Tədbir</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-start border-4 border-warning">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <span class="text-warning bg-light-warning p-2 rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="ti ti-mail-forward fs-6"></i>
+                        </span>
+                    </div>
+                    <div>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <h4 class="mb-0">@Model.PendingInvitationsCount</h4>
+                            <span class="text-muted">Gözləyən Dəvət</span>
+                        }
+                        else
+                        {
+                            <h4 class="mb-0">Limitsiz</h4>
+                            <span class="text-muted">İmkanlar</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-start border-4 border-success">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <span class="text-success bg-light-success p-2 rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="ti ti-users fs-6"></i>
+                        </span>
+                    </div>
+                    <div>
+                        <h4 class="mb-0">@Model.TotalUsersCount</h4>
+                        <span class="text-muted">Aktiv İştirakçı</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Upcoming Events List -->
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title fw-semibold mb-4">Yaxınlaşan Tədbirlər</h5>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Tədbir Adı</th>
+                        <th scope="col">Tarix</th>
+                        <th scope="col">Məkan</th>
+                        <th scope="col">Təşkilatçı</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.UpcomingEvents != null && Model.UpcomingEvents.Any())
+                    {
+                        @foreach (var anEvent in Model.UpcomingEvents)
+                        {
+                            <tr>
+                                <td>@anEvent.Description</td>
+                                <td>@anEvent.StartDate.ToString("dd MMMM yyyy")</td>
+                                <td>@anEvent.Location.Name</td>
+                                <td>@anEvent.Organizer.FullName</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center py-4">
+                                <p class="mb-0 text-muted">Yaxınlaşan tədbir tapılmadı.</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

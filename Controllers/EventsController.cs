@@ -34,18 +34,19 @@ namespace Code_Academy___Conference_Management_System.Controllers
         }
 
 
-        // POST: /Events (Create or Update)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateNewEventVM model)
         {
+            ModelState.Remove("EventVM.ID");
             if (!ModelState.IsValid)
             {
                 model.EventVMs = (await _eventService.GetAllAsync()).ToList();
                 model.EventTypes = (await _eventTypeService.GetAllAsync()).ToList();
                 model.Locations = (await _locationService.GetAllAsync()).ToList();
                 model.Organizers = (await _organizerService.GetAllAsync()).ToList();
-                return View(model);
+
+                return View("Index", model);
             }
 
             if (model.EventVM.ID == 0)
@@ -59,6 +60,7 @@ namespace Code_Academy___Conference_Management_System.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

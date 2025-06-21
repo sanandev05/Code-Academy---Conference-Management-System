@@ -36,6 +36,8 @@ namespace Code_Academy___Conference_Management_System.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
+                    await _userManager.AddToRoleAsync(user, "User");
+
                     return RedirectToAction("index", "home");
                 }
                
@@ -66,6 +68,13 @@ namespace Code_Academy___Conference_Management_System.Controllers
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             }
             return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home"); 
         }
     }
 }

@@ -16,6 +16,7 @@ builder.Services.AddDbContext<ConferenceDbContext>(options => {
 builder.Services.AddIdentity<UserIdentity, IdentityRole>()
     .AddEntityFrameworkStores<ConferenceDbContext>()
     .AddDefaultTokenProviders();
+
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 builder.Services.AddCustomRepositories();
@@ -23,6 +24,11 @@ builder.Services.AddCustomServices();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await RoleSeeder.SeedRolesAndAdminAsync(services);
+}
 
 
 // Configure the HTTP request pipeline.

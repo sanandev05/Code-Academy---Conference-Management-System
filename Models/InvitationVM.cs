@@ -12,10 +12,10 @@ namespace Code_Academy___Conference_Management_System.Models
             Declined
         }
         public int EventId { get; set; }
-        public string PersonId { get; set; }
+        public string UserId { get; set; }
 
         public EventVM Event { get; set; }
-        public UserIdentity Person { get; set; }
+        public UserIdentity User { get; set; }
 
         public Status InvitationStatus { get; set; } = Status.Pending;
 
