@@ -21,7 +21,6 @@ namespace Code_Academy___Conference_Management_System.Controllers
             _userManager = userManager;
         }
 
-        // --- Authentication Actions ---
 
         [HttpGet]
         public IActionResult SignUp()
@@ -35,21 +34,47 @@ namespace Code_Academy___Conference_Management_System.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (string.IsNullOrWhiteSpace(model.Username))
+                {
+                    ModelState.AddModelError("Username", "Username is required.");
+                    return View(model);
+                }
+
+                if (await _userManager.FindByNameAsync(model.Username) != null)
+                {
+                    ModelState.AddModelError("Username", "Username is already taken.");
+                    return View(model);
+                }
+
+                if (string.IsNullOrWhiteSpace(model.Email))
+                {
+                    ModelState.AddModelError("Email", "Email is required.");
+                    return View(model);
+                }
+
+                if (await _userManager.FindByEmailAsync(model.Email) != null)
+                {
+                    ModelState.AddModelError("Email", "Email is already in use.");
+                    return View(model);
+                }
+
                 var user = new UserIdentity
                 {
                     Name = model.Name,
                     Surname = model.Surname,
                     UserName = model.Username,
                     Email = model.Email,
-                    NormalizedUserName = $"{model.Name} {model.Surname}"
+                    NormalizedUserName = model.Username.ToUpperInvariant(),
+                    NormalizedEmail = model.Email.ToUpperInvariant()
                 };
+
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     await _userManager.AddToRoleAsync(user, "User");
-                    return RedirectToAction("index", "home");
+                    return RedirectToAction("Index", "Home");
                 }
 
                 foreach (var error in result.Errors)
@@ -57,8 +82,12 @@ namespace Code_Academy___Conference_Management_System.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+
             return View(model);
         }
+
+
+
 
         [HttpGet]
         public IActionResult SignIn()
@@ -90,7 +119,6 @@ namespace Code_Academy___Conference_Management_System.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // --- Profile Management Actions ---
 
         private async Task<ProfileVM> LoadUserModelAsync(UserIdentity user)
         {
